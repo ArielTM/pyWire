@@ -5,7 +5,9 @@ This python library uses tshark in order to sniff and analyze network packets.
 pyWire provides a simple yet powerful access to all data and fields of every packet that the Wireshark network protocol analyzer able to parse.
 It is intended to be used by network researchers, Security analysts or any other packet enthusiast who would like to write a script instead of going over thousands of packets by hand.
 Do you need to gather advanced statistics on a capture? extract all DNS queries and responses? map network entities and relations? spy on web access on your network? this library is designed for you. 
+
 The pyWire library is based on the older pyShark library, fix many bugs and implementation problems, and extend the interface to be more.
+
 The Library should be able to work on every OS that both Wireshark and python are able to run on. It was successfully tested on Windows and Linux (Ubuntu).
 
 Installaion guide:
