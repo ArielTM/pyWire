@@ -8,6 +8,8 @@ Do you need to gather advanced statistics on a capture? extract all DNS queries 
 The pyWire library is based on the older pyShark library, fix many bugs and implementation problems, and extend the interface to be more.
 The Library should be able to work on every OS that both Wireshark and python are able to run on. It was successfully tested on Windows and Linux (Ubuntu).
 
+To start working, simply issue help(pyWire) and help(pyWire.packet).
+
 One might ask himself, what is this guy blabbering about? I got scapy and its all I need. Here are some facts for you:
 - Scapy parse protocols by itself, leading to many parsing errors, bugs, and limitation of the available protocols. On the other hand - pyWire rely on Wireshark, the most convenient, rich and powerful network protocol sniffer you can ask for. 
 - Scapy still works only on python 2.6
