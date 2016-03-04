@@ -37,3 +37,6 @@ If you wish to contribute to pyWire, keep in mind the following guidelines:
 - It should be easy to use and access data in protocols.
 - It should be easy to install and run - I would prefer to rely on as few other libraries as possible. at some point I would like to get rid of the current dependency on lxml as well.
 - Let wireshark do all the hard work, do not add code that parse protocols by itself in this library.
+
+If you wish to contact the author with requests or suggestions, you may send mail to:
+pywire.sniffer@gmail.com
