@@ -17,7 +17,7 @@ Installaion guide:
 - Run windows installer for pyWire, or the usual setup install.
 
 To start working, simply issue help(pyWire) and help(pyWire.packet).
-
+Also see "pyWire usage.py" file under the pyWire folder.
 
 
 One might ask himself, what is this guy blabbering about? I got scapy and its all I need. Here are some facts for you:
