@@ -5,7 +5,7 @@ class LayerField(object):
     """
     Holds all data about a field, its value and nice representation.
     """
-    def __init__(self, fieldXml , parentName):
+    def __init__(self, fieldXml , parentName, fields_type=None):
         # must have attributes
         self._attr_name = None
         self._attr_showname = None
@@ -20,7 +20,14 @@ class LayerField(object):
         self._attributesNames = fieldXml.attrib.keys()
         for attrName ,attrVal in fieldXml.attrib.items():
             self.__setattr__( '_attr_' + attrName, attrVal)
-        
+
+        # parse field value
+        if (self._attr_value is not None) \
+                and (fields_type is not None) \
+                and (self._attr_name is not None)\
+                and (self._attr_name != ''):
+            self._attr_value = fields_type[self._attr_name](self._attr_value)
+
         # decide on a name for this field.
         if self._attr_name is not None:
             parentName = parentName.replace('_' , '.') 
@@ -191,7 +198,7 @@ def MakeName(someStr):
     else:
         return None
 
-def AddSubFields(obj , xmlObjWithFields):
+def AddSubFields(obj , xmlObjWithFields, fields_type=None):
     '''
     iterate over xml object with fields, and add each one of them to the object.
     return list of fields names that were added
@@ -201,7 +208,7 @@ def AddSubFields(obj , xmlObjWithFields):
         if getattr(xmlObjWithFields , 'field' , False) != False:
             # there are some sub fields
             for subFieldXml in xmlObjWithFields.field:
-                theField = LayerField(subFieldXml , obj._name)
+                theField = LayerField(subFieldXml , obj._name, fields_type)
                 subFieldName = theField._name
                 occurIndex = AddSubField(obj, subFieldName , theField)
                 subFieldsNames.append((subFieldName , occurIndex))
@@ -260,16 +267,16 @@ class Layer(object):
     """
     _DATA_LAYER = 'data'
 
-    def __init__(self, xml_proto_obj=None, raw_mode=False):
+    def __init__(self, xml_proto_obj=None, raw_mode=False, fields_type=None):
         self._raw_mode = raw_mode
         
         # extract attributes of protocol
         self._attributesNames = xml_proto_obj.attrib.keys()
-        for attrName ,attrVal in xml_proto_obj.attrib.items():
+        for attrName,attrVal in xml_proto_obj.attrib.items():
             self.__setattr__( '_attr_' + attrName, attrVal)
         self._name = self.layer_name
         # extract subfields. notice some may have the same name or no name
-        self._subFieldsNames = AddSubFields(self , xml_proto_obj)
+        self._subFieldsNames = AddSubFields(self , xml_proto_obj, fields_type)
 
     def TryGetAttribute(self , attrName):
         ''' for internal usage '''

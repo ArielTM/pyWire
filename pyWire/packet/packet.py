@@ -10,14 +10,14 @@ class Packet(object):
     Layers can be accessed via index or name.
     """
  
-    def __init__(self, xml_pkt_obj):
+    def __init__(self, xml_pkt_obj, fields_type=None):
         """
         Creates a Packet object with the given layers and info.
 
         :param xml_pkt_obj: An xml object which contains the packet data.
         """
         # create layer for each protocol
-        layers = [Layer(proto) for proto in xml_pkt_obj.proto]
+        layers = [Layer(proto, fields_type=fields_type) for proto in xml_pkt_obj.proto]
         geninfo, frame, layers = layers[0], layers[1], layers[2:]
         # frame.raw_mode = True
         

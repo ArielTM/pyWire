@@ -3,6 +3,7 @@ import subprocess
 
 from pyWire.tshark.tshark import get_tshark_path, get_tshark_version
 from pyWire.tshark.tshark_xml import packet_from_xml_packet
+from pyWire.tshark.tshark_report import parse_tshark_fields
 # for getting version of tshark
 from distutils.version import LooseVersion
 
@@ -19,6 +20,7 @@ class Capture(object):
         '''
         self.display_filter = display_filter
         self.running_processes = set()
+        self.fields_type = None
 
         if encryption_type and encryption_type.lower() in self.SUPPORTED_ENCRYPTION_STANDARDS:
             self.encryption = (decryption_key, encryption_type.lower())
@@ -26,7 +28,7 @@ class Capture(object):
             raise UnknownEncyptionStandardException("Only the following standards are supported: %s."
                                                     % ', '.join(self.SUPPORTED_ENCRYPTION_STANDARDS))
         
-    def apply_on_packets(self, packet_callback, timeout=None , packet_count = None ,args = None):
+    def apply_on_packets(self, packet_callback, timeout=None , packet_count = None ,args = None, parse_types=False):
         """
         Runs through all packets and calls the given callback (a function) with each one as it is read.
         If the capture is infinite (i.e. a live capture), it will run forever, otherwise it will complete after all
@@ -45,6 +47,9 @@ class Capture(object):
         
         self._packetsSource.StartPacketsSource()
         tshark_process = self._get_tshark_process()
+
+        if parse_types:
+            self.fields_type = parse_tshark_fields()
         
         try:
             self._go_through_packets_from_fd(tshark_process.stdout, packet_callback, args,
@@ -99,7 +104,7 @@ class Capture(object):
             packet, existing_data = self._extract_tag_from_data(existing_data)
             
             if packet:
-                packet = packet_from_xml_packet(packet)
+                packet = packet_from_xml_packet(packet, self.fields_type)
                 yield (packet, existing_data)
             else:
                 yield (None, existing_data)
